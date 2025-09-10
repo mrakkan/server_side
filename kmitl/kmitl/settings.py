@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-3iett@njix!uzh_vt_lr(z*l$7cdq1b^wh4yr7x_s6)^obdfq^'
+SECRET_KEY = 'django-insecure-cf*9e(gipwb)b=m4w#&5593!35i=2p!n6q)@x6)tnj)pc5s%x*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,9 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'registration',
+    'registration'
 ]
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -77,13 +76,15 @@ WSGI_APPLICATION = 'kmitl.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "kmitl",
+        "NAME": "kmitl", # ตามชื่อ database ที่สร้างใน postgressql
         "USER": "postgres",
-        "PASSWORD": "password",
+        "PASSWORD": "password", # username + password ไม่ได้เหมือนกันทุกเครื่อง
         "HOST": "localhost",
         "PORT": "5432",
     }
 }
+
+
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -119,6 +120,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

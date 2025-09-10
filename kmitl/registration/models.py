@@ -1,4 +1,5 @@
 from django.db import models
+from django import forms
 
 
 class Faculty(models.Model):
@@ -47,10 +48,14 @@ class Section(models.Model):
     capacity = models.PositiveSmallIntegerField(default=60)
 
     def __str__(self):
-        return f"{self.course.course_code} ({self.section_number}) - {self.semester})"
+        return f"{self.course.course_code} - {self.course.course_name} | Sec {self.section_number} | {self.dayOfWeekThai()} {self.start_time.strftime("%H:%M")}-{self.end_time.strftime("%H:%M")} | {self.semester}"
         
     def dayOfWeek(self):
         weekday = {"MON": 0, "TUE": 1, "WED": 2, "THU": 3, "FRI": 4}
+        return weekday[self.day_of_week]
+    
+    def dayOfWeekThai(self):
+        weekday = {"MON": "จันทร์", "TUE": "อังคาร", "WED": "พุธ", "THU": "พฤหัสบดี", "FRI": "ศุกร์"}
         return weekday[self.day_of_week]
 
 
@@ -65,12 +70,26 @@ class Student(models.Model):
     def __str__(self):
         return f"{self.student_id} - {self.first_name}"
 
+    def get_full_name(self):
+        return f"{self.first_name} - {self.last_name}"
+
 
 class StudentProfile(models.Model):
     student = models.OneToOneField(Student, on_delete=models.CASCADE, primary_key=True)
     email = models.EmailField(unique=True)
-    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    phone_number = models.CharField(max_length=10, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"Profile of {self.student.first_name}"
+
+class StudentForm(forms.Form):
+    student_id = forms.CharField(max_length=10)
+    first_name = forms.CharField(max_length=100)
+    last_name = forms.CharField(max_length=100)
+    faculty = forms.ModelChoiceField(queryset=Faculty.objects.all(), required=False, widget=forms.RadioSelect)
+    enrolled_sections = forms.ModelMultipleChoiceField(queryset=Section.objects.all(), required=False)
+    email = forms.EmailField()
+    phone_number = forms.CharField(max_length=10)
+    address = forms.CharField(widget=forms.Textarea)
+
